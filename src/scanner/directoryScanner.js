@@ -18,6 +18,10 @@ const {
   detectDependencies,
 } = require("./dependencyDetector");
 
+const {
+  generateProjectOverview,
+} = require("./projectSummarizer");
+
 function scanDirectory(rootFolder) {
   let files = [];
   let folders = 0;
@@ -93,7 +97,7 @@ function scanDirectory(rootFolder) {
 
           totalLines += lineCount;
 
-        } catch {}
+        } catch { }
 
         files.push({
           name: entry,
@@ -124,6 +128,17 @@ function scanDirectory(rootFolder) {
   const dependencies =
     detectDependencies(rootFolder);
 
+  const projectOverview =
+    generateProjectOverview({
+      rootFolder,
+
+      techStack,
+
+      fileSummaries: files.map(file => ({
+        filePath: file.path,
+      })),
+    });
+
   return {
     totalFiles: files.length,
     totalFolders: folders,
@@ -134,6 +149,7 @@ function scanDirectory(rootFolder) {
     languages,
     techStack,
     dependencies,
+    projectOverview,
 
     files,
   };

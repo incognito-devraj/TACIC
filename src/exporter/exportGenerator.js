@@ -28,9 +28,10 @@ function generateExport(scanResult, rootFolder) {
   output +=
     `Tech Stack: ${scanResult.techStack?.join(", ") || "Unknown"
     }\n\n`;
-
+  output += "\n";
   output +=
     "Security: Sensitive files excluded, secrets redacted\n\n";
+  output += "\n";
   output +=
     "DEPENDENCIES\n";
 
@@ -41,6 +42,62 @@ function generateExport(scanResult, rootFolder) {
     scanResult.dependencies?.dependencies || {}
   )) {
     output += `${name}: ${version}\n`;
+  }
+
+
+  output += `Project Name: ${scanResult.projectOverview?.projectName ||
+    "Unknown"
+    }\n\n`;
+
+  output += "\n";
+  output += "PROJECT OVERVIEW\n";
+  output += "=====================================\n\n";
+
+  output += `Purpose: ${scanResult.projectOverview?.purpose || "Unknown"
+    }\n\n`;
+
+  output += "Architecture\n\n";
+
+  output += `Frontend: ${scanResult.projectOverview?.architecture?.frontend?.join(", ")
+    || "N/A"
+    }\n`;
+
+  output += `Backend: ${scanResult.projectOverview?.architecture?.backend?.join(", ")
+    || "N/A"
+    }\n`;
+
+  output += `Database: ${scanResult.projectOverview?.architecture?.database?.join(", ")
+    || "N/A"
+    }\n\n`;
+
+  output += "Entry Points:\n";
+
+if (
+  scanResult.projectOverview?.entryPoints?.length
+) {
+  scanResult.projectOverview.entryPoints.forEach(
+    entry => {
+      output += `- ${entry}\n`;
+    }
+  );
+} else {
+  output += "- None Detected\n";
+}
+
+output += "\n";
+
+  output += "Main Modules:\n";
+
+  if (
+    scanResult.projectOverview?.modules?.length
+  ) {
+    scanResult.projectOverview.modules.forEach(
+      module => {
+        output += `- ${module}\n`;
+      }
+    );
+  } else {
+    output += "- None Detected\n";
   }
 
   output += "\n";
