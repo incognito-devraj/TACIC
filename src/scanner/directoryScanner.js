@@ -6,6 +6,7 @@ const {
   ignoredFiles,
   ignoredPathContains,
   allowedExtensions,
+  blockedExtensions
 } = require("./ignoreRules");
 
 function scanDirectory(rootFolder) {
@@ -13,11 +14,15 @@ function scanDirectory(rootFolder) {
   let folders = 0;
   let totalLines = 0;
 
+  // NEW
+  let skippedSensitiveFiles = 0;
+
   function walk(currentPath) {
     const entries = fs.readdirSync(currentPath);
 
     for (const entry of entries) {
       const fullPath = path.join(currentPath, entry);
+
       if (
         ignoredPathContains.some(pathPart =>
           fullPath.includes(pathPart)
@@ -36,7 +41,6 @@ function scanDirectory(rootFolder) {
 
       if (stat.isDirectory()) {
 
-        // Skip unwanted folders
         if (
           ignoredFolders.some(folder =>
             fullPath.includes(folder)
@@ -51,12 +55,19 @@ function scanDirectory(rootFolder) {
 
       } else {
 
-        // Skip lock files
+        // Skip ignored files
         if (ignoredFiles.includes(entry)) {
+          skippedSensitiveFiles++;
           continue;
         }
 
         const ext = path.extname(entry).toLowerCase();
+
+        // Skip blocked extensions
+        if (blockedExtensions.includes(ext)) {
+          skippedSensitiveFiles++;
+          continue;
+        }
 
         // Only allow source-code files
         if (
@@ -69,15 +80,17 @@ function scanDirectory(rootFolder) {
         let lineCount = 0;
 
         try {
-          const content =
-            fs.readFileSync(fullPath, "utf8");
+          const content = fs.readFileSync(
+            fullPath,
+            "utf8"
+          );
 
           lineCount =
             content.split("\n").length;
 
           totalLines += lineCount;
 
-        } catch { }
+        } catch {}
 
         files.push({
           name: entry,
@@ -103,6 +116,10 @@ function scanDirectory(rootFolder) {
     totalFiles: files.length,
     totalFolders: folders,
     totalLines,
+
+    // NEW
+    skippedSensitiveFiles,
+
     files,
   };
 }

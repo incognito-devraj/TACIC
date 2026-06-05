@@ -14,6 +14,23 @@ const ignoredFiles = [
   "package-lock.json",
   "pnpm-lock.yaml",
   "yarn.lock",
+
+  ".env",
+  ".env.local",
+  ".env.production",
+  ".env.development",
+  ".env.test",
+
+  ".npmrc",
+  ".yarnrc",
+  ".pnp.cjs",
+
+  "id_rsa",
+  "id_ed25519",
+  "known_hosts",
+
+  "credentials.json",
+  "service-account.json"
 ];
 
 const ignoredPathContains = [
@@ -31,9 +48,21 @@ const allowedExtensions = [
   ".json",
 ];
 
+const blockedExtensions = [
+  ".pem",
+  ".key",
+  ".crt",
+  ".p12",
+  ".pfx",
+  ".jks",
+  ".keystore",
+  ".log"
+];
+
 module.exports = {
   ignoredFolders,
   ignoredFiles,
   ignoredPathContains,
   allowedExtensions,
+  blockedExtensions
 };
