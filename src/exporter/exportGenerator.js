@@ -3,6 +3,12 @@ const { containsSecrets } =
 const { generateTree } = require("./treeBuilder");
 const fs = require("fs");
 
+const {
+  analyzeCode,
+} = require(
+  "../scanner/astAnalyzer"
+);
+
 function generateExport(scanResult, rootFolder) {
   let output = "";
 
@@ -55,6 +61,54 @@ function generateExport(scanResult, rootFolder) {
         file.fullPath,
         "utf8"
       );
+      const analysis =
+        analyzeCode(content);
+
+      output += "ANALYSIS\n";
+      output +=
+        "=====================================\n\n";
+
+      output += "Functions:\n";
+
+      if (analysis.functions.length) {
+        analysis.functions.forEach(fn => {
+          output += `- ${fn}\n`;
+        });
+      } else {
+        output += "- None\n";
+      }
+
+      output += "\nClasses:\n";
+
+      if (analysis.classes.length) {
+        analysis.classes.forEach(cls => {
+          output += `- ${cls}\n`;
+        });
+      } else {
+        output += "- None\n";
+      }
+
+      output += "\nImports:\n";
+
+      if (analysis.imports.length) {
+        analysis.imports.forEach(imp => {
+          output += `- ${imp}\n`;
+        });
+      } else {
+        output += "- None\n";
+      }
+
+      output += "\nExports:\n";
+
+      if (analysis.exports.length) {
+        analysis.exports.forEach(exp => {
+          output += `- ${exp}\n`;
+        });
+      } else {
+        output += "- None\n";
+      }
+
+      output += "\n";
 
       if (containsSecrets(content)) {
 
