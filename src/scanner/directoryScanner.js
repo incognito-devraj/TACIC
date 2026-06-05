@@ -1,3 +1,14 @@
+const {
+  detectInternalDependencies,
+} = require("./dependencyScanner");
+
+const {
+  buildGraph,
+} = require("../analyzer/graphBuilder");
+
+const {
+  detectCircularDependencies,
+} = require("../analyzer/circularDetector");
 const fs = require("fs");
 const path = require("path");
 
@@ -139,6 +150,22 @@ function scanDirectory(rootFolder) {
       })),
     });
 
+  const dependencyMap =
+  detectInternalDependencies(
+    files,
+    rootFolder
+  );
+
+const dependencyGraph =
+  buildGraph(
+    dependencyMap
+  );
+
+const circularDependencies =
+  detectCircularDependencies(
+    dependencyMap
+  );
+
   return {
     totalFiles: files.length,
     totalFolders: folders,
@@ -152,6 +179,10 @@ function scanDirectory(rootFolder) {
     projectOverview,
 
     files,
+
+    dependencyMap,
+dependencyGraph,
+circularDependencies,
   };
 }
 
