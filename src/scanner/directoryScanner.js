@@ -9,12 +9,19 @@ const {
   blockedExtensions
 } = require("./ignoreRules");
 
+const {
+  detectLanguages,
+  detectTechStack,
+} = require("./projectDetector");
+
+const {
+  detectDependencies,
+} = require("./dependencyDetector");
+
 function scanDirectory(rootFolder) {
   let files = [];
   let folders = 0;
   let totalLines = 0;
-
-  // NEW
   let skippedSensitiveFiles = 0;
 
   function walk(currentPath) {
@@ -50,12 +57,10 @@ function scanDirectory(rootFolder) {
         }
 
         folders++;
-
         walk(fullPath);
 
       } else {
 
-        // Skip ignored files
         if (ignoredFiles.includes(entry)) {
           skippedSensitiveFiles++;
           continue;
@@ -63,13 +68,11 @@ function scanDirectory(rootFolder) {
 
         const ext = path.extname(entry).toLowerCase();
 
-        // Skip blocked extensions
         if (blockedExtensions.includes(ext)) {
           skippedSensitiveFiles++;
           continue;
         }
 
-        // Only allow source-code files
         if (
           ext &&
           !allowedExtensions.includes(ext)
@@ -112,13 +115,25 @@ function scanDirectory(rootFolder) {
 
   walk(rootFolder);
 
+  const languages =
+    detectLanguages(files);
+
+  const techStack =
+    detectTechStack(files);
+
+  const dependencies =
+    detectDependencies(rootFolder);
+
   return {
     totalFiles: files.length,
     totalFolders: folders,
     totalLines,
 
-    // NEW
     skippedSensitiveFiles,
+
+    languages,
+    techStack,
+    dependencies,
 
     files,
   };

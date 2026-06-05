@@ -14,8 +14,30 @@ function generateExport(scanResult, rootFolder) {
   output += `Files: ${scanResult.totalFiles}\n`;
   output += `Folders: ${scanResult.totalFolders}\n`;
   output += `Lines Of Code: ${scanResult.totalLines}\n\n`;
+
+  output +=
+    `Languages: ${scanResult.languages?.join(", ") || "Unknown"
+    }\n`;
+
+  output +=
+    `Tech Stack: ${scanResult.techStack?.join(", ") || "Unknown"
+    }\n\n`;
+
   output +=
     "Security: Sensitive files excluded, secrets redacted\n\n";
+  output +=
+    "DEPENDENCIES\n";
+
+  output +=
+    "=====================================\n\n";
+
+  for (const [name, version] of Object.entries(
+    scanResult.dependencies?.dependencies || {}
+  )) {
+    output += `${name}: ${version}\n`;
+  }
+
+  output += "\n";
   output += "PROJECT STRUCTURE\n";
   output += "=====================================\n\n";
   output += generateTree(scanResult.files);
