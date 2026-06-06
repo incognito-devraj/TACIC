@@ -93,6 +93,13 @@ function scanDirectory(rootFolder) {
 
       try {
         stat = fs.statSync(fullPath);
+
+        if (
+          stat.size >
+          500 * 1024
+        ) {
+          continue;
+        }
       } catch {
         continue;
       }

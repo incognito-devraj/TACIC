@@ -10,9 +10,15 @@ function detectInternalDependencies(files, rootFolder) {
     const importRegex =
         /import\s+.*?\s+from\s+["'](.+?)["']/g;
 
+    const htmlScriptRegex =
+        /<script\s+src=["'](.+?)["']/gi;
+
     for (const file of files) {
 
-        if (!file.path.endsWith(".js")) {
+        if (
+            !file.path.endsWith(".js") &&
+            !file.path.endsWith(".html")
+        ) {
             continue;
         }
 
@@ -66,7 +72,28 @@ function detectInternalDependencies(files, rootFolder) {
                 }
             }
 
-        } catch {}
+            while (
+                (match =
+                    htmlScriptRegex.exec(content))
+            ) {
+
+                const importPath =
+                    match[1];
+
+                if (
+                    importPath.startsWith(".")
+                ) {
+
+                    dependencies.push(
+                        resolveImport(
+                            file.path,
+                            importPath
+                        )
+                    );
+                }
+            }
+
+        } catch { }
 
         dependencyMap[file.path] =
             dependencies;

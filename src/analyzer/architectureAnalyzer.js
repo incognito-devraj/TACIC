@@ -110,11 +110,17 @@ function detectDeadFiles(
         imported.add(edge.to);
     });
 
-    return graph.nodes.filter(
-        node =>
-            !imported.has(node) &&
-            !entryPoints.includes(node)
+    return graph.nodes.filter(node => {
+
+    const isHtmlEntry =
+        node.endsWith("index.html");
+
+    return (
+        !imported.has(node) &&
+        !entryPoints.includes(node) &&
+        !isHtmlEntry
     );
+});
 }
 
 function detectLayers(files) {
@@ -179,14 +185,29 @@ function calculateArchitectureScore({
     const density =
         dependencyGraph.nodes.length
             ? dependencyGraph.edges.length /
-            dependencyGraph.nodes.length
+              dependencyGraph.nodes.length
             : 0;
 
     if (density > 3) {
         score -= 15;
     }
 
-    return Math.max(0, score);
+    if (
+        dependencyGraph.nodes.length < 5
+    ) {
+        score -= 10;
+    }
+
+    if (
+        dependencyGraph.edges.length === 0
+    ) {
+        score -= 20;
+    }
+
+    return Math.max(
+        0,
+        Math.min(100, score)
+    );
 }
 
 module.exports = {

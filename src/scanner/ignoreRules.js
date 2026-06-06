@@ -10,6 +10,10 @@ const ignoredFolders = [
 ];
 
 const ignoredFiles = [
+  "export.txt",
+  "codebase-export.txt",
+  "project-export.txt",
+  "tacic-export.txt",
   ".gitignore",
   "package-lock.json",
   "pnpm-lock.yaml",
@@ -34,7 +38,10 @@ const ignoredFiles = [
 ];
 
 const ignoredPathContains = [
-  "src\\components\\ui"
+  "src\\components\\ui",
+
+  "exports",
+  "generated"
 ];
 
 const allowedExtensions = [

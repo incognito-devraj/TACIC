@@ -38,13 +38,23 @@ function detectDatabaseSchemas(files) {
                 entities
             );
 
-        } catch {}
+        } catch { }
     });
 
+    const uniqueEntities =
+        Array.from(
+            new Map(
+                entities.map(entity => [
+                    `${entity.type}:${entity.name.toLowerCase()}`,
+                    entity
+                ])
+            ).values()
+        );
+
     return {
-    entities,
-    relationships: []
-};
+        entities: uniqueEntities,
+        relationships: []
+    };
 }
 
 function detectMongoose(
@@ -54,7 +64,7 @@ function detectMongoose(
 ) {
 
     const regex =
-    /(mongoose\.model|model)\s*\(\s*["'`]([A-Za-z0-9_]+)["'`]/g;
+        /(mongoose\.model|model)\s*\(\s*["'`]([A-Za-z0-9_]+)["'`]/g;
 
     let match;
 
@@ -77,7 +87,7 @@ function detectPrisma(
 ) {
 
     const regex =
-        /model\s+([A-Za-z0-9_]+)\s*\{/g;
+        /^\s*model\s+([A-Za-z0-9_]+)\s*\{/gm;
 
     let match;
 
@@ -123,7 +133,7 @@ function detectSqlTables(
 ) {
 
     const regex =
-        /CREATE\s+TABLE\s+([A-Za-z0-9_]+)/gi;
+        /CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?\s+([A-Za-z0-9_]+)/gi;
 
     let match;
 

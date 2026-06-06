@@ -1,6 +1,6 @@
 function buildGraph(dependencyMap) {
 
-    const nodes = [];
+    const nodeSet = new Set();
     const edges = [];
 
     for (
@@ -10,25 +10,22 @@ function buildGraph(dependencyMap) {
         )
     ) {
 
-        nodes.push(file);
+        nodeSet.add(file);
 
         deps.forEach(dep => {
+
+            nodeSet.add(dep);
 
             edges.push({
                 from: file,
                 to: dep,
             });
 
-            if (
-                !nodes.includes(dep)
-            ) {
-                nodes.push(dep);
-            }
         });
     }
 
     return {
-        nodes,
+        nodes: [...nodeSet],
         edges,
     };
 }

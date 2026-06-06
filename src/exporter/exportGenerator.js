@@ -244,99 +244,99 @@ function generateExport(scanResult, rootFolder) {
   }
 
   output +=
-  "DATABASE INTELLIGENCE\n";
-
-output +=
-  "=====================================\n\n";
-
-if (
-  scanResult.databaseSchemas
-) {
+    "DATABASE INTELLIGENCE\n";
 
   output +=
-    "Entities:\n";
+    "=====================================\n\n";
 
   if (
-    scanResult.databaseSchemas.entities.length
+    scanResult.databaseSchemas
   ) {
 
-    scanResult.databaseSchemas.entities
-      .forEach(entity => {
+    output +=
+      "Entities:\n";
 
-        output +=
-          `- ${entity.name}
+    if (
+      scanResult.databaseSchemas.entities.length
+    ) {
+
+      scanResult.databaseSchemas.entities
+        .forEach(entity => {
+
+          output +=
+            `- ${entity.name}
 (${entity.type})
 File: ${entity.file}\n`;
-      });
+        });
 
-  } else {
+    } else {
 
-    output +=
-      "- None Detected\n";
-  }
+      output +=
+        "- None Detected\n";
+    }
 
-  output += "\n";
-
-  output +=
-    "Relationships:\n";
-
-  if (
-    scanResult.databaseSchemas.relationships.length
-  ) {
-
-    scanResult.databaseSchemas.relationships
-      .forEach(rel => {
-
-        output +=
-          `${rel.from} --> ${rel.to}\n`;
-      });
-
-  } else {
+    output += "\n";
 
     output +=
-      "- None Detected\n";
-  }
+      "Relationships:\n";
 
-   output += "\n";
+    if (
+      scanResult.databaseSchemas.relationships.length
+    ) {
 
-  output +=
-    "Detected Relationships:\n";
+      scanResult.databaseSchemas.relationships
+        .forEach(rel => {
 
-  if (
-    scanResult.databaseRelationships?.length
-  ) {
-
-    scanResult.databaseRelationships
-      .forEach(rel => {
-
-        output +=
-          `- ${rel.type}`;
-
-        if (rel.target) {
           output +=
-            ` -> ${rel.target}`;
-        }
+            `${rel.from} --> ${rel.to}\n`;
+        });
 
-        output += "\n";
-      });
+    } else {
 
-  } else {
+      output +=
+        "- None Detected\n";
+    }
+
+    output += "\n";
 
     output +=
-      "- None Detected\n";
+      "Detected Relationships:\n";
+
+    if (
+      scanResult.databaseRelationships?.length
+    ) {
+
+      scanResult.databaseRelationships
+        .forEach(rel => {
+
+          output +=
+            `- ${rel.type}`;
+
+          if (rel.target) {
+            output +=
+              ` -> ${rel.target}`;
+          }
+
+          output += "\n";
+        });
+
+    } else {
+
+      output +=
+        "- None Detected\n";
+    }
+
+    output += "\n";
+
+    output +=
+      "Database Overview\n\n";
+
+    output +=
+      scanResult.databaseOverview.summary;
+
+    output += "\n\n";
+
   }
-
-  output += "\n";
-
-  output +=
-  "Database Overview\n\n";
-
-output +=
-  scanResult.databaseOverview.summary;
-
-output += "\n\n";
-
-}
 
 
   output += "\n";
@@ -407,25 +407,48 @@ output += "\n\n";
       output += "\n";
 
       if (containsSecrets(content)) {
-
-        content = content
-          .replace(
-            /(API_KEY\s*=\s*).*/gi,
-            "$1[REDACTED]"
-          )
-          .replace(
-            /(SECRET\s*=\s*).*/gi,
-            "$1[REDACTED]"
-          )
-          .replace(
-            /(TOKEN\s*=\s*).*/gi,
-            "$1[REDACTED]"
-          )
-          .replace(
-            /(PASSWORD\s*=\s*).*/gi,
-            "$1[REDACTED]"
-          );
-      }
+  content = content
+    .replace(
+      /(API_KEY\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(SECRET_KEY\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(JWT_SECRET\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(CLIENT_SECRET\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(OPENAI_API_KEY\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(DATABASE_URL\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(ACCESS_TOKEN\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(REFRESH_TOKEN\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(PRIVATE_KEY\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    )
+    .replace(
+      /(STRIPE_SECRET\s*[=:]\s*).*/gi,
+      "$1[REDACTED]"
+    );
+}
 
       output += content;
     } catch (err) {

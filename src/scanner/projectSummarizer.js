@@ -55,37 +55,6 @@ function detectEntryPoints(fileSummaries) {
     return entryPoints;
 }
 
-function detectEntryPoints(fileSummaries) {
-    const entryPoints = [];
-
-    const knownEntries = [
-        "main.js",
-        "server.js",
-        "app.js",
-        "index.js",
-        "main.jsx",
-        "main.ts",
-        "main.tsx",
-        "preload.js"
-    ];
-
-    for (const file of fileSummaries) {
-        const filePath =
-            file.filePath.toLowerCase();
-
-        const fileName =
-            filePath.split("\\").pop();
-
-        if (
-            knownEntries.includes(fileName)
-        ) {
-            entryPoints.push(file.filePath);
-        }
-    }
-
-    return entryPoints;
-}
-
 function generateProjectOverview(projectInfo) {
     const {
         rootFolder,
@@ -173,6 +142,16 @@ function detectArchitecture(techStack) {
     if (stack.includes("mongodb")) database.push("MongoDB");
     if (stack.includes("mysql")) database.push("MySQL");
     if (stack.includes("postgres")) database.push("PostgreSQL");
+
+    if (stack.includes("electron")) {
+        frontend.push(
+            "Electron Renderer"
+        );
+
+        backend.push(
+            "Electron Main Process"
+        );
+    }
 
     return {
         frontend,
