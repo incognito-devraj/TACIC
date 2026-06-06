@@ -38,10 +38,22 @@ function detectRelationships(files) {
                 relationships
             );
 
-        } catch {}
+        } catch { }
     });
 
-    return relationships;
+
+
+    const unique =
+        Array.from(
+            new Map(
+                relationships.map(rel => [
+                    JSON.stringify(rel),
+                    rel
+                ])
+            ).values()
+        );
+
+    return unique;
 }
 
 function detectMongooseRefs(
@@ -51,7 +63,7 @@ function detectMongooseRefs(
 ) {
 
     const regex =
-        /ref\s*:\s*["'`](.*?)["'`]/g;
+        /\bref\s*:\s*["'`]([A-Za-z0-9_]+)["'`]/g;
 
     let match;
 

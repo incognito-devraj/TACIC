@@ -41,15 +41,10 @@ function detectDatabaseSchemas(files) {
         } catch {}
     });
 
-    const relationships =
-        discoverRelationships(
-            entities
-        );
-
     return {
-        entities,
-        relationships
-    };
+    entities,
+    relationships: []
+};
 }
 
 function detectMongoose(
@@ -59,7 +54,7 @@ function detectMongoose(
 ) {
 
     const regex =
-        /mongoose\.model\s*\(\s*["'`](.*?)["'`]/g;
+    /(mongoose\.model|model)\s*\(\s*["'`]([A-Za-z0-9_]+)["'`]/g;
 
     let match;
 
@@ -68,7 +63,7 @@ function detectMongoose(
     ) {
 
         entities.push({
-            name: match[1],
+            name: match[2],
             type: "Mongoose",
             file: file.path
         });
@@ -142,36 +137,6 @@ function detectSqlTables(
             file: file.path
         });
     }
-}
-
-function discoverRelationships(
-    entities
-) {
-
-    const relationships = [];
-
-    entities.forEach(entity => {
-
-        entities.forEach(target => {
-
-            if (
-                entity !== target &&
-                entity.name
-                    .toLowerCase()
-                    .includes(
-                        target.name.toLowerCase()
-                    )
-            ) {
-
-                relationships.push({
-                    from: entity.name,
-                    to: target.name
-                });
-            }
-        });
-    });
-
-    return relationships;
 }
 
 module.exports = {
