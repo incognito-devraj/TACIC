@@ -243,6 +243,63 @@ function generateExport(scanResult, rootFolder) {
       "No API Routes Detected\n\n";
   }
 
+  output +=
+  "DATABASE INTELLIGENCE\n";
+
+output +=
+  "=====================================\n\n";
+
+if (
+  scanResult.databaseSchemas
+) {
+
+  output +=
+    "Entities:\n";
+
+  if (
+    scanResult.databaseSchemas.entities.length
+  ) {
+
+    scanResult.databaseSchemas.entities
+      .forEach(entity => {
+
+        output +=
+          `- ${entity.name}
+(${entity.type})
+File: ${entity.file}\n`;
+      });
+
+  } else {
+
+    output +=
+      "- None Detected\n";
+  }
+
+  output += "\n";
+
+  output +=
+    "Relationships:\n";
+
+  if (
+    scanResult.databaseSchemas.relationships.length
+  ) {
+
+    scanResult.databaseSchemas.relationships
+      .forEach(rel => {
+
+        output +=
+          `${rel.from} --> ${rel.to}\n`;
+      });
+
+  } else {
+
+    output +=
+      "- None Detected\n";
+  }
+
+  output += "\n";
+}
+
 
   output += "\n";
   output += "PROJECT STRUCTURE\n";

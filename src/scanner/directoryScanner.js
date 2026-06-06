@@ -34,6 +34,10 @@ const {
 } = require("./apiRouteDetector");
 
 const {
+  detectDatabaseSchemas,
+} = require("./databaseSchemaDetector");
+
+const {
   detectNestRoutes,
 } = require("./nestRouteDetector");
 
@@ -181,6 +185,11 @@ function scanDirectory(rootFolder) {
     ...nestRoutes
   ];
 
+  const databaseSchemas =
+  detectDatabaseSchemas(
+    files
+  );
+
   const dependencyMap =
     detectInternalDependencies(
       files,
@@ -222,6 +231,7 @@ function scanDirectory(rootFolder) {
     dependencies,
     projectOverview,
     apiRoutes,
+    databaseSchemas,
 
     files,
 
