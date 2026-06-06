@@ -33,6 +33,12 @@ const {
   generateProjectOverview,
 } = require("./projectSummarizer");
 
+const {
+  analyzeArchitecture,
+} = require(
+  "../analyzer/architectureAnalyzer"
+);
+
 function scanDirectory(rootFolder) {
   let files = [];
   let folders = 0;
@@ -151,20 +157,28 @@ function scanDirectory(rootFolder) {
     });
 
   const dependencyMap =
-  detectInternalDependencies(
-    files,
-    rootFolder
-  );
+    detectInternalDependencies(
+      files,
+      rootFolder
+    );
 
-const dependencyGraph =
-  buildGraph(
-    dependencyMap
-  );
+  const dependencyGraph =
+    buildGraph(
+      dependencyMap
+    );
 
-const circularDependencies =
-  detectCircularDependencies(
-    dependencyMap
-  );
+  const circularDependencies =
+    detectCircularDependencies(
+      dependencyMap
+    );
+
+  const architecture =
+    analyzeArchitecture(
+      dependencyGraph,
+      circularDependencies,
+      files,
+      projectOverview.entryPoints
+    );
 
   return {
     totalFiles: files.length,
@@ -181,8 +195,9 @@ const circularDependencies =
     files,
 
     dependencyMap,
-dependencyGraph,
-circularDependencies,
+    dependencyGraph,
+    circularDependencies,
+    architecture,
   };
 }
 

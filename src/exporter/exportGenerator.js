@@ -72,19 +72,19 @@ function generateExport(scanResult, rootFolder) {
 
   output += "Entry Points:\n";
 
-if (
-  scanResult.projectOverview?.entryPoints?.length
-) {
-  scanResult.projectOverview.entryPoints.forEach(
-    entry => {
-      output += `- ${entry}\n`;
-    }
-  );
-} else {
-  output += "- None Detected\n";
-}
+  if (
+    scanResult.projectOverview?.entryPoints?.length
+  ) {
+    scanResult.projectOverview.entryPoints.forEach(
+      entry => {
+        output += `- ${entry}\n`;
+      }
+    );
+  } else {
+    output += "- None Detected\n";
+  }
 
-output += "\n";
+  output += "\n";
 
   output += "Main Modules:\n";
 
@@ -99,6 +99,83 @@ output += "\n";
   } else {
     output += "- None Detected\n";
   }
+
+  output += "\n";
+  output += "ARCHITECTURE INTELLIGENCE\n";
+  output +=
+    "=====================================\n\n";
+
+  const arch =
+    scanResult.architecture;
+
+  output +=
+    `Architecture Score: ${arch.architectureScore
+    }/100\n\n`;
+
+  output +=
+    "Most Connected File:\n";
+
+  if (arch.mostConnectedFile.file) {
+
+    output +=
+      `- ${arch.mostConnectedFile.file}
+(${arch.mostConnectedFile.connections} connections)\n`;
+
+  } else {
+
+    output +=
+      "- None\n";
+  }
+
+  output += "\n";
+
+  output +=
+    "Dependency Statistics:\n";
+
+  output +=
+    `- Nodes: ${arch.dependencyStats.totalNodes}\n`;
+
+  output +=
+    `- Edges: ${arch.dependencyStats.totalEdges}\n`;
+
+  output +=
+    `- Average Dependencies: ${arch.dependencyStats.averageDependencies}\n`;
+
+  output +=
+    `- Circular Dependencies: ${arch.dependencyStats.circularDependencyCount}\n`;
+
+  output += "\n";
+
+  output +=
+    "Dead Files:\n";
+
+  if (arch.deadFiles.length) {
+
+    arch.deadFiles.forEach(file => {
+      output += `- ${file}\n`;
+    });
+
+  } else {
+
+    output += "- None\n";
+  }
+
+  output += "\n";
+
+  output +=
+    "Layer Distribution:\n";
+
+  output +=
+    `- Presentation: ${arch.layers.presentation}\n`;
+
+  output +=
+    `- Application: ${arch.layers.application}\n`;
+
+  output +=
+    `- Data: ${arch.layers.data}\n`;
+
+  output += "\n";
+
 
   output += "\n";
   output += "PROJECT STRUCTURE\n";
