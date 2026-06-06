@@ -297,7 +297,45 @@ File: ${entity.file}\n`;
       "- None Detected\n";
   }
 
+   output += "\n";
+
+  output +=
+    "Detected Relationships:\n";
+
+  if (
+    scanResult.databaseRelationships?.length
+  ) {
+
+    scanResult.databaseRelationships
+      .forEach(rel => {
+
+        output +=
+          `- ${rel.type}`;
+
+        if (rel.target) {
+          output +=
+            ` -> ${rel.target}`;
+        }
+
+        output += "\n";
+      });
+
+  } else {
+
+    output +=
+      "- None Detected\n";
+  }
+
   output += "\n";
+
+  output +=
+  "Database Overview\n\n";
+
+output +=
+  scanResult.databaseOverview.summary;
+
+output += "\n\n";
+
 }
 
 

@@ -38,6 +38,18 @@ const {
 } = require("./databaseSchemaDetector");
 
 const {
+  detectRelationships,
+} = require(
+  "./databaseRelationshipDetector"
+);
+
+const {
+  generateDatabaseOverview,
+} = require(
+  "./databaseOverview"
+);
+
+const {
   detectNestRoutes,
 } = require("./nestRouteDetector");
 
@@ -186,9 +198,20 @@ function scanDirectory(rootFolder) {
   ];
 
   const databaseSchemas =
-  detectDatabaseSchemas(
-    files
-  );
+    detectDatabaseSchemas(
+      files
+    );
+
+  const databaseRelationships =
+    detectRelationships(
+      files
+    );
+
+  const databaseOverview =
+    generateDatabaseOverview(
+      databaseSchemas,
+      databaseRelationships
+    );
 
   const dependencyMap =
     detectInternalDependencies(
@@ -231,7 +254,10 @@ function scanDirectory(rootFolder) {
     dependencies,
     projectOverview,
     apiRoutes,
+
     databaseSchemas,
+    databaseRelationships,
+    databaseOverview,
 
     files,
 
