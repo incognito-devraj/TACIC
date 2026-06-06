@@ -209,6 +209,40 @@ function generateExport(scanResult, rootFolder) {
 
   output += "\n\n";
 
+  output +=
+    "API INTELLIGENCE\n";
+
+  output +=
+    "=====================================\n\n";
+
+  if (
+    scanResult.apiRoutes &&
+    scanResult.apiRoutes.length
+  ) {
+
+    scanResult.apiRoutes.forEach(
+      route => {
+
+        output +=
+          `${route.method} ${route.path}\n`;
+
+        output +=
+          `Framework: ${route.framework}\n`;
+
+        output +=
+          `Controller: ${route.controller}\n`;
+
+        output +=
+          `File: ${route.file}\n\n`;
+      }
+    );
+
+  } else {
+
+    output +=
+      "No API Routes Detected\n\n";
+  }
+
 
   output += "\n";
   output += "PROJECT STRUCTURE\n";

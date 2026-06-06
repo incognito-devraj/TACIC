@@ -30,6 +30,14 @@ const {
 } = require("./dependencyDetector");
 
 const {
+  detectApiRoutes,
+} = require("./apiRouteDetector");
+
+const {
+  detectNestRoutes,
+} = require("./nestRouteDetector");
+
+const {
   generateProjectOverview,
 } = require("./projectSummarizer");
 
@@ -162,6 +170,17 @@ function scanDirectory(rootFolder) {
       })),
     });
 
+  const expressAndFastifyRoutes =
+    detectApiRoutes(files);
+
+  const nestRoutes =
+    detectNestRoutes(files);
+
+  const apiRoutes = [
+    ...expressAndFastifyRoutes,
+    ...nestRoutes
+  ];
+
   const dependencyMap =
     detectInternalDependencies(
       files,
@@ -187,9 +206,9 @@ function scanDirectory(rootFolder) {
     );
 
   const visualizationData =
-  buildVisualizationData(
-    dependencyGraph
-  );
+    buildVisualizationData(
+      dependencyGraph
+    );
 
   return {
     totalFiles: files.length,
@@ -202,6 +221,7 @@ function scanDirectory(rootFolder) {
     techStack,
     dependencies,
     projectOverview,
+    apiRoutes,
 
     files,
 
