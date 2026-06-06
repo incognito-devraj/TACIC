@@ -177,6 +177,39 @@ function generateExport(scanResult, rootFolder) {
   output += "\n";
 
 
+  output +=
+    "MODULE CONNECTION GRAPH\n";
+
+  output +=
+    "=====================================\n\n";
+
+  scanResult.dependencyGraph.edges.forEach(
+    edge => {
+
+      output +=
+        `${edge.from} --> ${edge.to}\n`;
+
+    }
+  );
+
+  output += "\n";
+
+
+  output +=
+    "ARCHITECTURE VISUALIZATION DATA\n";
+
+  output +=
+    "=====================================\n\n";
+
+  output += JSON.stringify(
+    scanResult.visualizationData,
+    null,
+    2
+  );
+
+  output += "\n\n";
+
+
   output += "\n";
   output += "PROJECT STRUCTURE\n";
   output += "=====================================\n\n";

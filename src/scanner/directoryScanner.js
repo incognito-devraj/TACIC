@@ -39,6 +39,12 @@ const {
   "../analyzer/architectureAnalyzer"
 );
 
+const {
+  buildVisualizationData,
+} = require(
+  "../analyzer/visualizationBuilder"
+);
+
 function scanDirectory(rootFolder) {
   let files = [];
   let folders = 0;
@@ -180,6 +186,11 @@ function scanDirectory(rootFolder) {
       projectOverview.entryPoints
     );
 
+  const visualizationData =
+  buildVisualizationData(
+    dependencyGraph
+  );
+
   return {
     totalFiles: files.length,
     totalFolders: folders,
@@ -198,6 +209,7 @@ function scanDirectory(rootFolder) {
     dependencyGraph,
     circularDependencies,
     architecture,
+    visualizationData,
   };
 }
 
