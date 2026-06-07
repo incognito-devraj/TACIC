@@ -187,6 +187,126 @@ output += "\n";
 
   output += "\n";
 
+  output +=
+  "CODE QUALITY ANALYZER\n";
+
+output +=
+  "=====================================\n\n";
+
+output +=
+  "Complexity Analysis\n\n";
+
+scanResult.complexityAnalysis
+  ?.forEach(item => {
+
+    let risk = "Low";
+
+    if (item.score > 40) {
+      risk = "High";
+    }
+    else if (item.score > 20) {
+      risk = "Medium";
+    }
+
+    output +=
+      `${item.file}\n`;
+
+    output +=
+      `Score: ${item.score}\n`;
+
+    output +=
+      `Risk: ${risk}\n\n`;
+  });
+
+output +=
+  "Large Files\n\n";
+
+if (
+  scanResult.largeFiles?.length
+) {
+
+  scanResult.largeFiles
+    .forEach(file => {
+
+      output +=
+        `${file.path}\n`;
+
+      output +=
+        `${file.lines} lines\n\n`;
+    });
+
+} else {
+
+  output +=
+    "None\n\n";
+}
+
+output +=
+  "Dead Code\n\n";
+
+if (
+  scanResult.deadCode?.length
+) {
+
+  scanResult.deadCode
+    .forEach(item => {
+
+      output +=
+        `${item.function}\n`;
+
+      output +=
+        `File: ${item.file}\n\n`;
+    });
+
+} else {
+
+  output +=
+    "None\n\n";
+}
+
+output +=
+  "Duplicate Code\n\n";
+
+if (
+  scanResult.duplicateCode?.length
+) {
+
+  scanResult.duplicateCode
+    .forEach(item => {
+
+      output +=
+        `${item.file1}\n`;
+
+      output +=
+        `${item.file2}\n\n`;
+    });
+
+} else {
+
+  output +=
+    "None\n\n";
+}
+
+output +=
+  "Technical Debt\n\n";
+
+if (
+  scanResult.technicalDebt
+) {
+
+  output +=
+    `Debt Score: ${scanResult.technicalDebt.debtScore}/100\n`;
+
+  output +=
+    `Large Files: ${scanResult.technicalDebt.largeFiles}\n`;
+
+  output +=
+    `Dead Code: ${scanResult.technicalDebt.deadCode}\n`;
+
+  output +=
+    `Duplicates: ${scanResult.technicalDebt.duplicates}\n\n`;
+}
+
 
   output +=
     "MODULE CONNECTION GRAPH\n";

@@ -85,6 +85,37 @@ const {
   generateOnboardingGuide
 } = require("../ai/onboardingGenerator");
 
+const {
+  analyzeComplexity
+} = require(
+  "../analyzer/complexityAnalyzer"
+);
+
+const {
+  detectLargeFiles
+} = require(
+  "../analyzer/largeFileDetector"
+);
+
+const {
+  detectDeadCode
+} = require(
+  "../analyzer/deadCodeDetector"
+);
+
+const {
+  detectDuplicateCode
+} = require(
+  "../analyzer/duplicateCodeDetector"
+);
+
+const {
+  generateTechnicalDebt
+} = require(
+  "../analyzer/technicalDebtAnalyzer"
+);
+
+
 function scanDirectory(rootFolder) {
   let files = [];
   let folders = 0;
@@ -288,6 +319,59 @@ function scanDirectory(rootFolder) {
       projectOverview
     });
 
+  const complexityAnalysis =
+    files.map(file => {
+
+      try {
+
+        const content =
+          fs.readFileSync(
+            file.fullPath,
+            "utf8"
+          );
+
+        return {
+          file: file.path,
+          score:
+            analyzeComplexity(
+              content
+            )
+        };
+
+      } catch {
+
+        return {
+          file: file.path,
+          score: 0
+        };
+      }
+
+    });
+
+  const largeFiles =
+    detectLargeFiles(files);
+
+  const deadCode =
+    detectDeadCode(files);
+
+  const duplicateCode =
+    detectDuplicateCode(files);
+
+  const technicalDebt =
+    generateTechnicalDebt({
+
+      complexity:
+        complexityAnalysis,
+
+      largeFiles,
+
+      deadCode,
+
+      duplicates:
+        duplicateCode
+
+    });
+
   return {
     totalFiles: files.length,
     totalFolders: folders,
@@ -316,6 +400,12 @@ function scanDirectory(rootFolder) {
     architectureExplanation,
     dependencyIntelligence,
     onboardingGuide,
+
+    complexityAnalysis,
+    largeFiles,
+    deadCode,
+    duplicateCode,
+    technicalDebt,
   };
 }
 
