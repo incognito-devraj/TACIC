@@ -60,6 +60,18 @@ generateContextPack(
 
 output += "\n";
 
+output +=
+"README GENERATION\n";
+
+output +=
+"=====================================\n\n";
+
+output +=
+scanResult.generatedReadme;
+
+output +=
+"\n\n";
+
   output += "\n";
   output += "PROJECT OVERVIEW\n";
   output += "=====================================\n\n";

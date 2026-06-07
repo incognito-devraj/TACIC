@@ -86,6 +86,12 @@ const {
 } = require("../ai/onboardingGenerator");
 
 const {
+  generateReadme
+} = require(
+  "../documentation/readmeGenerator"
+);
+
+const {
   analyzeComplexity
 } = require(
   "../analyzer/complexityAnalyzer"
@@ -319,6 +325,14 @@ function scanDirectory(rootFolder) {
       projectOverview
     });
 
+  const generatedReadme =
+    generateReadme({
+      projectOverview,
+      techStack,
+      dependencies,
+      files
+    });
+
   const complexityAnalysis =
     files.map(file => {
 
@@ -406,6 +420,7 @@ function scanDirectory(rootFolder) {
     deadCode,
     duplicateCode,
     technicalDebt,
+    generatedReadme,
   };
 }
 
