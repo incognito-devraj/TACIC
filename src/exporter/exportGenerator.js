@@ -1,3 +1,7 @@
+const {
+  generateContextPack
+} = require("../ai/contextPackGenerator");
+
 const { containsSecrets } =
   require("../scanner/secretDetector");
 const { generateTree } = require("./treeBuilder");
@@ -48,6 +52,13 @@ function generateExport(scanResult, rootFolder) {
   output += `Project Name: ${scanResult.projectOverview?.projectName ||
     "Unknown"
     }\n\n`;
+
+  output +=
+generateContextPack(
+  scanResult
+);
+
+output += "\n";
 
   output += "\n";
   output += "PROJECT OVERVIEW\n";

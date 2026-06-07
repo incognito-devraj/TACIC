@@ -69,6 +69,22 @@ const {
   "../analyzer/visualizationBuilder"
 );
 
+const {
+  generateRepositoryUnderstanding
+} = require("../ai/repositoryUnderstanding");
+
+const {
+  generateArchitectureExplanation
+} = require("../ai/architectureExplainer");
+
+const {
+  generateDependencyIntelligence
+} = require("../ai/dependencyIntelligence");
+
+const {
+  generateOnboardingGuide
+} = require("../ai/onboardingGenerator");
+
 function scanDirectory(rootFolder) {
   let files = [];
   let folders = 0;
@@ -249,6 +265,29 @@ function scanDirectory(rootFolder) {
       dependencyGraph
     );
 
+  const repositoryUnderstanding =
+    generateRepositoryUnderstanding({
+      projectOverview,
+      dependencyGraph,
+      files
+    });
+
+  const architectureExplanation =
+    generateArchitectureExplanation({
+      projectOverview,
+      architecture
+    });
+
+  const dependencyIntelligence =
+    generateDependencyIntelligence({
+      architecture
+    });
+
+  const onboardingGuide =
+    generateOnboardingGuide({
+      projectOverview
+    });
+
   return {
     totalFiles: files.length,
     totalFolders: folders,
@@ -273,6 +312,10 @@ function scanDirectory(rootFolder) {
     circularDependencies,
     architecture,
     visualizationData,
+    repositoryUnderstanding,
+    architectureExplanation,
+    dependencyIntelligence,
+    onboardingGuide,
   };
 }
 
