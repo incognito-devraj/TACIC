@@ -1,4 +1,10 @@
 const {
+  generateModuleDocumentation
+} = require(
+  "../documentation/moduleDocGenerator"
+);
+
+const {
   detectInternalDependencies,
 } = require("./dependencyScanner");
 
@@ -89,6 +95,24 @@ const {
   generateReadme
 } = require(
   "../documentation/readmeGenerator"
+);
+
+const {
+  generateApiDocumentation
+} = require(
+  "../documentation/apiDocGenerator"
+);
+
+const {
+  generateArchitectureDocumentation
+} = require(
+  "../documentation/architectureDocGenerator"
+);
+
+const {
+  generateInstallationGuide
+} = require(
+  "../documentation/installationGuideGenerator"
 );
 
 const {
@@ -333,6 +357,28 @@ function scanDirectory(rootFolder) {
       files
     });
 
+  const moduleDocumentation =
+  generateModuleDocumentation(
+    files
+  );
+
+const apiDocumentation =
+  generateApiDocumentation(
+    apiRoutes
+  );
+
+const architectureDocumentation =
+  generateArchitectureDocumentation(
+    architecture,
+    projectOverview
+  );
+
+const installationGuide =
+  generateInstallationGuide(
+    techStack
+  );
+
+
   const complexityAnalysis =
     files.map(file => {
 
@@ -421,6 +467,11 @@ function scanDirectory(rootFolder) {
     duplicateCode,
     technicalDebt,
     generatedReadme,
+
+    moduleDocumentation,
+    apiDocumentation,
+    architectureDocumentation,
+    installationGuide,
   };
 }
 
