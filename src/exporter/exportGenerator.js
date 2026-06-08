@@ -111,6 +111,45 @@ output +=
 "\n\n";
 
 output +=
+"EXECUTION CHAINS\n";
+
+output +=
+"=====================================\n\n";
+
+if (
+  scanResult.executionChains?.length
+) {
+
+  scanResult.executionChains
+    .forEach(chain => {
+
+      output +=
+        `${chain.trigger}\n`;
+
+      output +=
+        "---------------------\n";
+
+      chain.chain.forEach(
+        step => {
+
+          output +=
+            `${step}\n`;
+        }
+      );
+
+      output += "\n";
+    });
+
+} else {
+
+  output +=
+    "No Execution Chains Detected\n\n";
+}
+
+output +=
+"\n\n";
+
+output +=
 "ARCHITECTURE DOCUMENTATION\n";
 
 output +=

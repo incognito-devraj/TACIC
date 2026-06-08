@@ -1,4 +1,9 @@
 const {
+  buildExecutionChains
+} = require(
+  "../analyzer/executionChainBuilder"
+);
+const {
   generateRequestFlowDocumentation
 } = require(
   "../documentation/requestFlowDocGenerator"
@@ -302,6 +307,11 @@ function scanDirectory(rootFolder) {
     requestFlows
   );
 
+  const executionChains =
+  buildExecutionChains(
+    requestFlows
+  );
+
 
   const databaseSchemas =
     detectDatabaseSchemas(
@@ -497,6 +507,7 @@ const installationGuide =
 
     requestFlows,
     requestFlowDocumentation,
+    executionChains,
   };
 }
 
