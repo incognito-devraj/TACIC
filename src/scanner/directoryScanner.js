@@ -1,4 +1,16 @@
 const {
+  generateRequestFlowDocumentation
+} = require(
+  "../documentation/requestFlowDocGenerator"
+);
+
+const {
+  detectRequestFlows
+} = require(
+  "./requestFlowDetector"
+);
+
+const {
   generateModuleDocumentation
 } = require(
   "../documentation/moduleDocGenerator"
@@ -280,6 +292,16 @@ function scanDirectory(rootFolder) {
     ...expressAndFastifyRoutes,
     ...nestRoutes
   ];
+  const requestFlows =
+  detectRequestFlows(
+    files
+  );
+
+  const requestFlowDocumentation =
+  generateRequestFlowDocumentation(
+    requestFlows
+  );
+
 
   const databaseSchemas =
     detectDatabaseSchemas(
@@ -472,6 +494,9 @@ const installationGuide =
     apiDocumentation,
     architectureDocumentation,
     installationGuide,
+
+    requestFlows,
+    requestFlowDocumentation,
   };
 }
 

@@ -98,7 +98,17 @@ scanResult.apiDocumentation;
 output +=
 "\n\n";
 
+output +=
+"REQUEST FLOW INTELLIGENCE\n";
 
+output +=
+"=====================================\n\n";
+
+output +=
+scanResult.requestFlowDocumentation;
+
+output +=
+"\n\n";
 
 output +=
 "ARCHITECTURE DOCUMENTATION\n";
@@ -125,59 +135,6 @@ scanResult.installationGuide;
 
 output +=
 "\n\n";
-
-output +=
-"MODULE DOCUMENTATION\n";
-
-output +=
-"=====================================\n\n";
-
-output +=
-scanResult.moduleDocumentation;
-
-output +=
-"\n\n";
-
-
-output +=
-"API DOCUMENTATION\n";
-
-output +=
-"=====================================\n\n";
-
-output +=
-scanResult.apiDocumentation;
-
-output +=
-"\n\n";
-
-
-output +=
-"ARCHITECTURE DOCUMENTATION\n";
-
-output +=
-"=====================================\n\n";
-
-output +=
-scanResult.architectureDocumentation;
-
-output +=
-"\n\n";
-
-
-output +=
-"INSTALLATION GUIDE\n";
-
-output +=
-"=====================================\n\n";
-
-output +=
-scanResult.installationGuide;
-
-output +=
-"\n\n";
-
-
 
   output += "\n";
   output += "PROJECT OVERVIEW\n";
